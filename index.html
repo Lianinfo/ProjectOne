@@ -1,0 +1,70 @@
+<?php
+header('Content-Type: text/html; charset=utf-8');
+
+ini_set('error_reporting','on');
+ini_set('display_errors','on');
+ini_set('display_startup_errors',1);
+error_reporting(E_ALL);
+	include('captcha_lines.php');
+
+include('captcha_txt.php');
+//===============================   ФУНКЦИИ   =========================================
+	//session_start();
+
+	function generate_code() 
+	{    
+		 $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz'; // Задаем символы, используемые в капче. Разделитель использовать не надо.
+		  $length = rand(4, 7); // Задаем длину капчи, в нашем случае - от 4 до 7
+		  $numChars = strlen($chars); // Узнаем, сколько у нас задано символов
+		  $str = '';
+		  for ($i = 0; $i < $length; $i++) {
+			$str .= substr($chars, rand(1, $numChars) - 1, 1);
+		  } // Генерируем код
+
+		// Перемешиваем, на всякий случай
+			$array_mix = preg_split('//', $str, -1, PREG_SPLIT_NO_EMPTY);
+		//	srand ((float)microtime()*1000000);
+			shuffle ($array_mix);
+		// Возвращаем полученный код
+		//return
+		$TXT=implode("", $array_mix);
+	$_SESSION['kod']=$TXT;
+		//echo "<h1 style='position:fixed; left:80; top:40'>".$TXT."</h1>" ;
+		
+	}
+	
+	generate_code() ;
+   // lines();
+
+
+
+
+
+?>
+
+<html>
+<head>
+   <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"> 
+  
+  </head><title>scena</title><body bgcolor="#ffffff">
+     <img src="captcha.gif" style="position:fixed; left:0; top:40" id='capcha-image'>
+     <!--<table border=1><tr><td background="captcha.gif" width="500" height="200" style="repeat:no">dfg</td></tr></table>-->
+      <form action="captcha.php" method="GET" enctype="multipart/form-data">
+<!-- Форма будет отправлять введенные пользователем данные скрипту go.php методом POST -->
+
+<!-- Сама капча -->
+<!--  <a href="javascript:void(0);" onclick="document.getElementById('capcha-image').src='captcha.php?rid=' + Math.random();">Обновить капчу</a> -->
+<!-- Ссылка на обновление капчи. Запрашиваем у captcha.php случайное изображение.  -->
+<span>Введите капчу:</span>
+<input type="text" name="code">
+<input type="submit" name="go" value="обновить CAPTCHA">
+<input type="submit" name="vhod" value="Войти с CAPTCHA">
+
+<!-- Отправляем данные скрипту-обработчику go.php -->
+</form>
+</body>
+ </html>
+
+
+
+
