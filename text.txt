@@ -4,4 +4,3 @@
 	bare = false
 	logallrefupdates = true
 	//
-	ttt www
